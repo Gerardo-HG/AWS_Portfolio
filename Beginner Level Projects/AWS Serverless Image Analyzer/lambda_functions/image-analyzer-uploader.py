@@ -5,7 +5,7 @@ import uuid
 import os
 
 def lambda_handler(event, context):
-    bucket_name = os.environ.get('UPLOAD_BUCKET')
+    bucket_name = os.environ.get('<YOUR_BUCKET_NAME_ENV_VARIABLE>')
     s3 = boto3.client('s3')
     image_id = str(uuid.uuid4())
     
