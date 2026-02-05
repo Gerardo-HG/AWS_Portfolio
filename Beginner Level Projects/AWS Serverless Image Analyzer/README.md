@@ -34,7 +34,9 @@ El proyecto consta de 3 funciones Lambda principales que orquestan el flujo de d
 
 ### 1. 📤 Lambda Uploader (`analyzer-image-uploader`)
 **Disparador:** API Gateway (POST)
+
 **Role IAM:** lambda-uploader-role (Permisos: S3WriteOnlyAccess, CloudWatchLogsFullAccess)
+
 **Responsabilidad:**
 - Recibe la imagen en formato binario o Base64 desde el cliente (ideal para formato .png y .jpg).
 - Decodifica la imagen y genera un UUID único.
@@ -43,7 +45,9 @@ El proyecto consta de 3 funciones Lambda principales que orquestan el flujo de d
 
 ### 2. 🧠 Lambda Processor (`analyzer-image-processor`)
 **Disparador:** Evento S3 (ObjectCreated)
+
 **Role IAM:** lambda-processor-role (Permisos: DynamoDBFullAccess, RekognitionReadOnlyAccess, S3ReadOnlyAccess, CloudWatchLogsFullAccess)
+
 **Responsabilidad:**
 - Se activa automáticamente cuando un archivo nuevo llega a S3.
 - Envía la imagen a **Amazon Rekognition**.
@@ -52,7 +56,9 @@ El proyecto consta de 3 funciones Lambda principales que orquestan el flujo de d
 
 ### 3. 🔍 Lambda Reader (`analyzer-image-reader`)
 **Disparador:** API Gateway (GET)
+
 **Role IAM:** lambda-reader-role (Permisos: DynamoDBReadOnlyAcces, CloudWatchLogsFullAccess)
+
 **Responsabilidad:**
 - Recibe una solicitud con el parámetro `?imageId=...`.
 - Busca en **DynamoDB** por esa clave primaria.
