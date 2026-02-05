@@ -25,7 +25,7 @@ def lambda_handler(event, context):
         labels_json = json.dumps(response['Labels'])
         labels_decimal = json.loads(labels_json, parse_float=Decimal)
 
-        table = dynamodb.Table(os.environ['DYNAMO_TABLE'])
+        table = dynamodb.Table(os.environ['<YOUR_DYNAMO_TABLE_ENVIRONMENT_VARIABLE>'])
         table.put_item(Item={
             'imageId': image_id,
             'imageName': key,
