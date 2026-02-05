@@ -2,7 +2,9 @@
 
 Un sistema de análisis de imágenes totalmente **Serverless** construido en AWS. Este proyecto permite subir imágenes a través de una API REST, procesarlas automáticamente con Inteligencia Artificial (Amazon Rekognition) para detectar objetos y etiquetas, y almacenar los resultados para su consulta posterior.
 
+
 ![Arquitectura del Proyecto](serverless-image-anaylzer.png)
+
 
 
 ## 🚀 Características
@@ -63,8 +65,7 @@ Sube una imagen para iniciar el proceso.
 - **URL:** `https://tu-api-id.execute-api.us-east-1.amazonaws.com/dev/upload`
 - **Body:** Binary (Selecciona tu archivo .jpg/.png)
 
-![Postman Upload Screenshot](assets/postman-upload.png)
-*(Coloca aquí tu captura de Postman haciendo el POST exitoso)*
+![Postman Upload Screenshot](assets/POSTMAN_POST.png)
 
 ### Paso 2: Obtener Resultados (GET)
 Usa el `imageId` que recibiste en el paso anterior.
@@ -83,3 +84,7 @@ Usa el `imageId` que recibiste en el paso anterior.
     ],
     "timestamp": "2023-10-27T10:00:00"
 }
+```
+
+![Postman Get Screenshot](assets/POSTMAN_GET.png)
+
