@@ -71,7 +71,7 @@ El proyecto consta de 3 funciones Lambda principales que orquestan el flujo de d
 ### Paso 1: Subir una Imagen (POST)
 Sube una imagen para iniciar el proceso.
 - **Método:** `POST`
-- **URL:** `https://tu-api-id.execute-api.us-east-1.amazonaws.com/dev/upload`
+- **URL:** `<YOUR_APIGATEWAY_HTTP>/upload`
 - **Body:** Binary (Selecciona tu archivo .jpg/.png)
 
 ![Postman Upload Screenshot](assets/POSTMAN_POST.png)
@@ -79,7 +79,7 @@ Sube una imagen para iniciar el proceso.
 ### Paso 2: Obtener Resultados (GET)
 Usa el `imageId` que recibiste en el paso anterior.
 - **Método:** `GET`
-- **URL:** `https://tu-api-id.execute-api.us-east-1.amazonaws.com/dev/result?imageId=TU-UUID-AQUI`
+- **URL:** `<YOUR_APIGATEWAY_HTTP>/dev/result?imageId=<YOUR_imageID>`
 
 **Respuesta Esperada:**
 ```json
