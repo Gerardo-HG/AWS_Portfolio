@@ -114,6 +114,7 @@ El proyecto consta de 2 funciones Lambda principales que orquestan el flujo de d
 
 ![Dashboard](DASHBOARD.png)
 
+
 ---
 
 
