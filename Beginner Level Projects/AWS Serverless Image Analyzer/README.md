@@ -97,3 +97,5 @@ Usa el `imageId` que recibiste en el paso anterior.
 
 ![Postman Get Screenshot](assets/POSTMAN_GET.png)
 
+## 👨‍💻 Autor
+Gerardo HG
