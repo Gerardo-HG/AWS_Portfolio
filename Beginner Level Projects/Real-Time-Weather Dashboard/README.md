@@ -112,6 +112,11 @@ El proyecto consta de 2 funciones Lambda principales que orquestan el flujo de d
 
 ---
 
+![Dashboard](DASHBOARD.png)
+
+---
+
+
 ## 🛠️ Mejoras Futuras
 
 - Autenticación con Cognito
@@ -122,4 +127,6 @@ El proyecto consta de 2 funciones Lambda principales que orquestan el flujo de d
 
 ## 👨‍💻 Autor
 Gerardo HG
+
+
 
