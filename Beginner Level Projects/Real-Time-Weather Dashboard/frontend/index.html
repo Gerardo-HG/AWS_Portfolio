@@ -1,1 +1,164 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather Dashboard - Lima</title>
+    <style>
+      body {
+        font-family: "Arial", sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        text-align: center;
+        padding: 50px 20px;
+        margin: 0;
+        min-height: 100vh;
+      }
+      .container {
+        max-width: 600px;
+        margin: 0 auto;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px;
+        box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+      }
+      h1 {
+        margin-bottom: 30px;
+        font-size: 2.5em;
+      }
+      .weather-card {
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 15px;
+        padding: 30px;
+        margin: 20px 0;
+      }
+      .temperature {
+        font-size: 4em;
+        font-weight: bold;
+        margin: 20px 0;
+      }
+      .description {
+        font-size: 1.5em;
+        text-transform: capitalize;
+        margin-bottom: 20px;
+      }
+      .details {
+        display: flex;
+        justify-content: space-around;
+        margin-top: 30px;
+      }
+      .detail-item {
+        text-align: center;
+      }
+      .detail-label {
+        font-size: 0.9em;
+        opacity: 0.8;
+      }
+      .detail-value {
+        font-size: 1.2em;
+        font-weight: bold;
+        margin-top: 5px;
+      }
+      .update-time {
+        margin-top: 30px;
+        font-size: 0.9em;
+        opacity: 0.8;
+      }
+      .loading {
+        font-size: 1.2em;
+        margin: 40px 0;
+      }
+      .error {
+        color: #ff6b6b;
+        background: rgba(255, 107, 107, 0.2);
+        padding: 15px;
+        border-radius: 10px;
+        margin: 20px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>🌤️ Weather Dashboard</h1>
+      <div id="weatherContent">
+        <div class="loading">Cargando datos del clima...</div>
+      </div>
+    </div>
 
+    <script>
+      const API_URL =
+        "https://wwbipiy37j.execute-api.us-east-2.amazonaws.com/prod/weather";
+
+      async function fetchWeather() {
+        try {
+          const response = await fetch(API_URL);
+          const responseData = await response.json();
+
+          let data;
+          if (responseData.body) {
+            data = JSON.parse(responseData.body);
+          } else {
+            data = responseData;
+          }
+
+          console.log("Datos recibidos:", data);
+
+          if (data.error) {
+            throw new Error(data.error);
+          }
+
+          displayWeather(data);
+        } catch (error) {
+          console.error("Error:", error);
+          displayError(error.message);
+        }
+      }
+
+      function displayWeather(data) {
+        const content = document.getElementById("weatherContent");
+
+        if (!data || !data.temp) {
+          displayError("Datos incompletos");
+          return;
+        }
+
+        content.innerHTML = `
+            <div class="weather-card">
+                <h2>${data.city || "Lima"}</h2>
+                <div class="temperature">${Math.round(data.temp)}°C</div>
+                <div class="description">${data.description || "N/A"}</div>
+                <div class="details">
+                    <div class="detail-item">
+                        <div class="detail-label">Humedad</div>
+                        <div class="detail-value">${data.humidity || 0}%</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label">Última actualización</div>
+                        <div class="detail-value">${data.date ? new Date(data.date).toLocaleTimeString() : "N/A"}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="update-time">
+                Actualizado: ${data.date ? new Date(data.date).toLocaleString() : "N/A"}
+            </div>
+        `;
+      }
+
+      function displayError(message) {
+        const content = document.getElementById("weatherContent");
+        content.innerHTML = `
+            <div class="error">
+                <h3>Error al cargar datos</h3>
+                <p>${message}</p>
+                <p style="font-size:0.8em; margin-top:10px;">Verifica que API Gateway esté desplegado y CORS habilitado</p>
+            </div>
+        `;
+      }
+
+      // Cargar datos
+      fetchWeather();
+      setInterval(fetchWeather, 30000);
+    </script>
+  </body>
+</html>
