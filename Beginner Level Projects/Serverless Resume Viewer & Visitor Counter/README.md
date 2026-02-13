@@ -34,7 +34,7 @@ interfaz web estática.
 
 El proyecto utiliza una única función Lambda inteligente que procesa las solicitudes según el contexto del evento:
 
-### 📤 Lambda Reader
+### 📤 Lambda Reader_Updater
 **Disparador:** API Gateway (Solicitud GET al endpoint)
 
 **Role IAM:** Permisos de `dynamodb:GetItem` y `dynamodb:UpdateItem` sobre la tabla de visitas.
@@ -62,14 +62,20 @@ El proyecto utiliza una única función Lambda inteligente que procesa las solic
 - Configurar una Variable de Entorno: `TABLE_NAME` con el nombre de tu tabla DynamoDB.
 - Asignar permisos en el **Execution Role** para permitir lectura y escritura en la tabla creada.
 
-## 3. API Gateway
+## 5. Amazon CloudFront
+- **Origin**: El bucket S3 anterior.
+- **Origin Access Control (OAC)**: Generar y actualizar la política en el bucket S3.
+- **Root Object**: `index.html`.
+- **Comportamiento**: Redirigir HTTP a HTTPS.
+
+## 4. API Gateway
 - Crear una **API REST**.
 - Crear un método **GET**.
 - **IMPORTANTE:** Activar la casilla "Usar la integración de proxy de Lambda".
 - Habilitar **CORS** (Access-Control-Allow-Origin: '*').
 - Desplegar la API en una etapa llamada `'prod'`.
 
-## 4. S3 Frontend
+## 5. S3 Frontend
 - Crear un bucket S3 y habilitar **Static Website Hosting**.
 - Subir el archivo `index.html` (asegúrate de actualizar la constante `API_URL` con tu endpoint de API Gateway).
 - Configurar la siguiente política de bucket pública:
