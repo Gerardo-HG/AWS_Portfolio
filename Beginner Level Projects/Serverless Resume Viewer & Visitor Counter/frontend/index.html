@@ -1,0 +1,69 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Mi CV</title>
+    <style>
+      button {
+        margin: 10px;
+        padding: 10px 20px;
+        cursor: pointer;
+      }
+
+      #counter {
+        color: blue;
+        font-size: 1.2em;
+      }
+
+      #result {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Panel de Control del CV</h1>
+    <button onclick="verCV()">Ver mi CV</button>
+
+    <button onclick="consultarVistas()">👁️ Ver total de vistas</button>
+
+    <p id="result">
+      Visitas registradas a nivel global<strong id="counter"
+        >Cargando....</strong
+      >
+    </p>
+
+    <script>
+      const API_URL = "<YOUR_APIGATEWAY_URL>/prod/visits";
+      const PDF_URL = "<YOUR_CLOUDFRONT_URL>/<YOUR_RESUME.PDF>";
+
+      const resultContainer = document.getElementById("result");
+      const counterSpan = document.getElementById("counter");
+
+      async function consultarVistas() {
+        resultContainer.style.display = "block";
+        counterSpan.textContent = "Cargando....";
+
+        try {
+          const res = await fetch(`${API_URL}?type=get`);
+          const data = await res.json();
+
+          counterSpan.textContent = data.visits;
+        } catch (e) {
+          console.error("Error al consultar: ", e);
+          counterSpan.textContent = "Error";
+        }
+      }
+
+      function verCV() {
+        window.open(PDF_URL, "_blank");
+
+        fetch(API_URL)
+          .then((res) => res.json())
+          .then((data) => {
+            counterSpan.textContent = data.visits;
+          })
+          .catch((e) => console.error("Error al incrementar: ", e));
+      }
+    </script>
+  </body>
+</html>
