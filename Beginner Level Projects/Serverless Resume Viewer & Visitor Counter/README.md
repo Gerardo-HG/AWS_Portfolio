@@ -97,7 +97,7 @@ El proyecto utiliza una única función Lambda inteligente que procesa las solic
 
 ---
 
-![Aplicacion](index.png)
+![Aplicacion](aplicacion.png)
 
 
 ## 🛠️ Mejoras Futuras
