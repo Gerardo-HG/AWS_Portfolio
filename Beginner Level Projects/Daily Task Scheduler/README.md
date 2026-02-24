@@ -38,12 +38,11 @@ en cronogramas optimizados. La aplicación utiliza el poder de **Amazon Bedrock*
 ---
 
 RESULTADO
+![](partyrock-1.png)
 
-[](partyrock-1.png)
+![](partyrock-2.png)
 
-[](partyrock-2.png)
-
-[](partyrock-3.png)
+![](partyrock-3.png)
 
 
 ---
