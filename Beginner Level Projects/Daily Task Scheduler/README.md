@@ -37,6 +37,16 @@ en cronogramas optimizados. La aplicación utiliza el poder de **Amazon Bedrock*
 
 ---
 
+RESULTADO
+
+[](partyrock-1.png)
+
+[](partyrock-2.png)
+
+[](partyrock-3.png)
+
+
+---
+
 ## 👤 Autor
-* **[Tu Nombre]** - [Tu LinkedIn / Perfil de AWS]
-* *Proyecto realizado como parte del aprendizaje práctico en servicios de IA Generativa de AWS.*
+* **[Gerardo-HG]**
