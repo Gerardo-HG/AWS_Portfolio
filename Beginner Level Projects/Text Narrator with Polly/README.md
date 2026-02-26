@@ -2,7 +2,7 @@
 
 Un sistema de conversión de texto a voz (Text-to-Speech) que utiliza inteligencia artificial. Emplea una arquitectura sin servidor (Serverless) en AWS para procesar texto y proporcionar archivos de audio narrados.
 
-![Arquitectura del Proyecto](text-narrator-polly-architecture.png)
+![Arquitectura del Proyecto](text-narrator-architecture.png)
 
 ## 🚀 Características
 
