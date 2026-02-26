@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Text Narrator | AWS Polly</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #6366f1;
+        --primary-hover: #4f46e5;
+        --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+        --card-bg: #ffffff;
+        --text-main: #1e293b;
+        --text-muted: #64748b;
+        --border: #e2e8f0;
+        --accent: #f8fafc;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background: var(--bg-gradient);
+        background-attachment: fixed;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 20px;
+        color: var(--text-main);
+      }
+
+      .app-card {
+        background: var(--card-bg);
+        width: 100%;
+        max-width: 550px;
+        border-radius: 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+      }
+
+      .header {
+        padding: 2rem 2rem 1rem;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 1.75rem;
+        font-weight: 700;
+        margin: 0;
+        background: linear-gradient(to right, #6366f1, #a855f7);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        letter-spacing: -0.025em;
+      }
+
+      .description {
+        color: var(--text-muted);
+        font-size: 0.95rem;
+        margin-top: 0.5rem;
+      }
+
+      .content {
+        padding: 0 2rem 2rem;
+      }
+
+      .input-group {
+        margin-bottom: 1.5rem;
+      }
+
+      textarea {
+        width: 100%;
+        padding: 1.25rem;
+        border: 2px solid var(--border);
+        border-radius: 16px;
+        font-family: inherit;
+        font-size: 1rem;
+        resize: none;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-sizing: border-box;
+        background-color: var(--accent);
+        outline: none;
+        color: var(--text-main);
+      }
+
+      textarea:focus {
+        border-color: var(--primary);
+        background-color: #fff;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+      }
+
+      #btn-speech {
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        padding: 1rem;
+        font-size: 1rem;
+        font-weight: 600;
+        border-radius: 14px;
+        cursor: pointer;
+        width: 100%;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.2);
+      }
+
+      #btn-speech:hover {
+        background-color: var(--primary-hover);
+        transform: translateY(-1px);
+        box-shadow: 0 10px 15px -3px rgba(79, 70, 229, 0.3);
+      }
+
+      #btn-speech:active {
+        transform: translateY(0);
+      }
+
+      #btn-speech::before {
+        content: "✨";
+        font-size: 1.1rem;
+      }
+
+      #btn-speech:disabled {
+        background-color: var(--text-muted);
+        cursor: not-allowed;
+        transform: none;
+        box-shadow: none;
+      }
+
+      #btn-speech:disabled::before {
+        display: none;
+      }
+
+      /* Sección de Resultados */
+      .output-section {
+        border-top: 1px solid var(--border);
+        padding: 1.5rem 2rem 2rem;
+        background-color: var(--accent);
+      }
+
+      .output-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 1rem;
+        color: var(--text-main);
+        font-weight: 600;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+
+      .output-header i {
+        font-style: normal;
+      }
+
+      .output-content {
+        background: #ffffff;
+        border-radius: 12px;
+        padding: 1.25rem;
+        min-height: 80px;
+        border: 1px solid var(--border);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .placeholder-text {
+        color: #94a3b8;
+        font-size: 0.9rem;
+        font-style: italic;
+      }
+
+      audio {
+        width: 100%;
+        height: 40px;
+      }
+
+      .error-message {
+        color: #ef4444;
+        background: #fef2f2;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1px solid #fee2e2;
+        font-size: 0.9rem;
+        width: 100%;
+        text-align: center;
+      }
+
+      .spinner {
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: #fff;
+        animation: spin 0.8s linear infinite;
+        display: none;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="app-card">
+      <div class="header">
+        <h1 id="title">AI Text Narrator</h1>
+        <p class="description">
+          Convierte texto a voz con tecnología AWS Polly.
+        </p>
+      </div>
+
+      <div class="content">
+        <div class="input-group">
+          <textarea
+            name="text-content"
+            id="text-content"
+            placeholder="Escribe el mensaje que deseas narrar..."
+            rows="6"
+          ></textarea>
+        </div>
+
+        <button onclick="reproducirTexto()" id="btn-speech">
+          <div class="spinner" id="spinner"></div>
+          <span id="btn-text">Generar Narracion</span>
+        </button>
+      </div>
+
+      <div class="output-section">
+        <div class="output-header"><i>🎧</i> Resultado del Audio</div>
+        <div class="output-content" id="outputContent">
+          <span class="placeholder-text">El reproductor aparecerá aquí...</span>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const btnSpeech = document.getElementById("btn-speech");
+      const textInputElement = document.getElementById("text-content");
+
+      function showError(message) {
+        const output = document.getElementById("outputContent");
+        output.innerHTML = `
+          <div class="error-message">
+            <strong>Error:</strong> ${message}
+          </div>
+        `;
+      }
+
+      // Funcion Reproducir Texto
+      async function reproducirTexto() {
+        const text = textInputElement.value.trim();
+        const spinner = document.getElementById("spinner");
+        const btnText = document.getElementById("btn-text");
+        const output = document.getElementById("outputContent");
+
+        if (!text) {
+          showError("Porfavor ingresa algun texto en el cuadro");
+          textInputElement.focus();
+          return;
+        }
+
+        // Inicio Estado de Carga
+        btnSpeech.disabled = true;
+        spinner.style.display = "block";
+        btnText.innerText = "Generando audio....";
+        output.innerHTML =
+          '<span class="placeholder-text">Procesando con IA...</span>';
+
+        try {
+          const response = await fetch("<YOUR_API_GATEWAY_ENDOPOINT>", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              text: text,
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`HTTP Error status: ${response.status}`);
+          }
+
+          const data = await response.json();
+
+          output.innerHTML = `<audio controls autoplay>
+            <source src="${data.url}" type="audio/mpeg">
+            Tu navegador no soporta el elemento del audio.
+            </audio>
+          `;
+        } catch (error) {
+          console.error("Error encontrado -> " + error.message);
+          showError(
+            "Fallo al intentar generar el audio para el texto. Intentalo de nuevo",
+          );
+        } finally {
+          // Fin de Estado de Carga
+          btnSpeech.disabled = false;
+          spinner.style.display = "none";
+          btnText.innerText = "Generar Narracion";
+        }
+      }
+
+      textInputElement.addEventListener("input", function (e) {
+        if (e.key === "Enter" && !e.shiftKey) {
+          e.preventDefault();
+          reproducirTexto();
+        }
+      });
+    </script>
+  </body>
+</html>
